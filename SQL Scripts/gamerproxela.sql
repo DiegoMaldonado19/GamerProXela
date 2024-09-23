@@ -1,0 +1,116 @@
+CREATE DATABASE gamerproxela;
+
+\c gamerproxela;
+
+-- control productos
+CREATE SCHEMA cp;
+-- control empleados
+CREATE SCHEMA ce;
+-- control ventas
+CREATE SCHEMA cv;
+-- control clientes
+CREATE SCHEMA cc;
+-- control descuentos
+CREATE SCHEMA cd;
+-- control inventario
+CREATE SCHEMA ci;
+-- control bodega
+CREATE SCHEMA cb;
+
+-- crear tablas dentro del esquema de control de productos
+CREATE TABLE cp.sucursal (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    direccion VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE cp.producto (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10, 2) NOT NULL
+);
+
+-- crear tablas dentro del esquema de control de bodega
+CREATE TABLE cb.bodega (
+    id SERIAL PRIMARY KEY,
+    sucursal_id INT REFERENCES cp.sucursal(id),
+    producto_id INT REFERENCES cp.producto(id),
+    cantidad INT NOT NULL
+);
+
+-- crear tablas dentro del esquema de control de inventario
+CREATE TABLE ci.inventario (
+    id SERIAL PRIMARY KEY,
+    sucursal_id INT REFERENCES cp.sucursal(id),
+    producto_id INT REFERENCES cp.producto(id),
+    cantidad INT NOT NULL,
+    ubicacion VARCHAR(50) NOT NULL
+);
+
+-- crear tablas dentro del esquema de control de empleados
+CREATE TABLE ce.rol (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE ce.empleado (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    rol_id INT REFERENCES ce.rol(id),
+    sucursal_id INT REFERENCES cp.sucursal(id),
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    contrasena VARCHAR(50) NOT NULL,
+    caja INT
+);
+
+-- crear tablas dentro del esquema de control de ventas
+CREATE TABLE cv.venta (
+    id SERIAL PRIMARY KEY,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cliente_id INT REFERENCES cc.cliente(id),
+    cajero_id INT REFERENCES ce.empleado(id),
+    total_sin_descuentos DECIMAL(10, 2) NOT NULL,
+    total_con_descuentos DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE cv.detalle_venta (
+    id SERIAL PRIMARY KEY,
+    venta_id INT REFERENCES cv.venta(id),
+    producto_id INT REFERENCES cp.producto(id),
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL
+);
+
+-- crear tablas dentro del esquema de control de clientes
+CREATE TABLE cc.cliente (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    nit VARCHAR(20) UNIQUE NOT NULL
+);
+
+-- crear tablas dentro del esquema de control de descuentos
+CREATE TABLE cd.tarjeta (
+    id SERIAL PRIMARY KEY,
+    tipo VARCHAR(20) NOT NULL,
+    puntos_por_cada_200 DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE cd.historial_descuento (
+    id SERIAL PRIMARY KEY,
+    cliente_id INT REFERENCES cc.cliente(id),
+    tarjeta_id INT REFERENCES cd.tarjeta(id),
+    puntos_utilizados INT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- insercion inicial de datos de roles
+INSERT INTO ce.rol (nombre) VALUES ('Cajero'), ('Bodega'), ('Inventario'), ('Administrador');
+
+-- insercion inicial de datos de tarjeta
+INSERT INTO cd.tarjeta (tipo, puntos_por_cada_200) VALUES 
+('Común', 5), 
+('Oro', 10), 
+('Platino', 20), 
+('Diamante', 30);
