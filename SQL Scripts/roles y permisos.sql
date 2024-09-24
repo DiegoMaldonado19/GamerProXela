@@ -1,4 +1,4 @@
-\c gamerproxela;
+\connect gamerproxela;
 
 -- creacion de roles
 CREATE ROLE admin;
@@ -43,16 +43,16 @@ GRANT INSERT,UPDATE,DELETE,SELECT ON TABLE cd.historial_descuento TO admin;
 GRANT USAGE ON SCHEMA cv TO cajero;
 GRANT USAGE ON SCHEMA cc TO cajero;
 
-GRANT INSERT ON TABLE cv.venta TO admin;
-GRANT INSERT ON TABLE cv.detalle_venta TO admin;
-GRANT INSERT,UPDATE ON TABLE cc.cliente TO admin;
+GRANT INSERT,SELECT ON TABLE cv.venta TO cajero;
+GRANT INSERT,SELECT ON TABLE cv.detalle_venta TO cajero;
+GRANT INSERT,SELECT ON TABLE cc.cliente TO cajero;
 
 -- añadiendo permisos a rol de bodega
 GRANT USAGE ON SCHEMA cp TO bodega;
 GRANT USAGE ON SCHEMA cb TO bodega;
 
-GRANT INSERT,UPDATE ON TABLE cp.producto TO bodega;
-GRANT INSERT,UPDATE ON TABLE cb.bodega TO bodega;
+GRANT INSERT,UPDATE,SELECT ON TABLE cp.producto TO bodega;
+GRANT INSERT,UPDATE,SELECT ON TABLE cb.bodega TO bodega;
 
 -- añadiendo permisos a rol inventario
 GRANT USAGE ON SCHEMA cp TO inventario;

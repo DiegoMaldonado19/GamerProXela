@@ -1,6 +1,6 @@
 CREATE DATABASE gamerproxela;
 
-\c gamerproxela;
+\connect gamerproxela;
 
 -- control productos
 CREATE SCHEMA cp;
@@ -28,7 +28,7 @@ CREATE TABLE cp.producto (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     descripcion TEXT,
-    precio DECIMAL(10, 2) NOT NULL
+    precio NUMERIC(10, 2) NOT NULL
 );
 
 -- crear tablas dentro del esquema de control de bodega
@@ -55,7 +55,7 @@ CREATE TABLE ce.rol (
 );
 
 CREATE TABLE ce.empleado (
-    id SERIAL PRIMARY KEY,
+    cui VARCHAR(13) UNIQUE PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
     rol_id INT REFERENCES ce.rol(id),
@@ -69,40 +69,41 @@ CREATE TABLE ce.empleado (
 CREATE TABLE cv.venta (
     id SERIAL PRIMARY KEY,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    cliente_id INT REFERENCES cc.cliente(id),
+    cliente_id VARCHAR(20) REFERENCES cc.cliente(nit),
     cajero_id INT REFERENCES ce.empleado(id),
-    total_sin_descuentos DECIMAL(10, 2) NOT NULL,
-    total_con_descuentos DECIMAL(10, 2) NOT NULL
+    total_sin_descuentos NUMERIC(10, 2) NOT NULL,
+    total_con_descuentos NUMERIC(10, 2) NOT NULL
 );
 
 CREATE TABLE cv.detalle_venta (
-    id SERIAL PRIMARY KEY,
     venta_id INT REFERENCES cv.venta(id),
     producto_id INT REFERENCES cp.producto(id),
     cantidad INT NOT NULL,
-    precio_unitario DECIMAL(10, 2) NOT NULL
+    precio_unitario NUMERIC(10, 2) NOT NULL,
+    PRIMARY KEY (venta_id, producto_id)
 );
 
 -- crear tablas dentro del esquema de control de clientes
 CREATE TABLE cc.cliente (
-    id SERIAL PRIMARY KEY,
+    nit VARCHAR(20) UNIQUE PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
-    nit VARCHAR(20) UNIQUE NOT NULL
+    direccion VARCHAR(60) NOT NULL,
+    id_tarjeta INT REFERENCES cd.tarjeta(id)
 );
 
 -- crear tablas dentro del esquema de control de descuentos
 CREATE TABLE cd.tarjeta (
     id SERIAL PRIMARY KEY,
     tipo VARCHAR(20) NOT NULL,
-    puntos_por_cada_200 DECIMAL(10, 2) NOT NULL
+    puntos_por_cada_200 NUMERIC(10, 2) NOT NULL
 );
 
 CREATE TABLE cd.historial_descuento (
-    id SERIAL PRIMARY KEY,
-    cliente_id INT REFERENCES cc.cliente(id),
+    cliente_id VARCHAR(20) REFERENCES cc.cliente(nit),
     tarjeta_id INT REFERENCES cd.tarjeta(id),
     puntos_utilizados INT NOT NULL,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (cliente_id, tarjeta_id)
 );
 
 -- insercion inicial de datos de roles
