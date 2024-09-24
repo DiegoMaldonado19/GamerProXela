@@ -45,7 +45,7 @@ CREATE TABLE ci.inventario (
     sucursal_id INT REFERENCES cp.sucursal(id),
     producto_id INT REFERENCES cp.producto(id),
     cantidad INT NOT NULL,
-    ubicacion VARCHAR(50) NOT NULL
+    pasillo VARCHAR(5) NOT NULL
 );
 
 -- crear tablas dentro del esquema de control de empleados
