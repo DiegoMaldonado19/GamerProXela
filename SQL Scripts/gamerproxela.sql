@@ -87,6 +87,7 @@ CREATE TABLE cv.detalle_venta (
 CREATE TABLE cc.cliente (
     nit VARCHAR(20) UNIQUE PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(60) NOT NULL,
     direccion VARCHAR(60) NOT NULL,
     id_tarjeta INT REFERENCES cd.tarjeta(id)
 );
