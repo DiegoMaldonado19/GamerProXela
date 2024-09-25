@@ -14,14 +14,14 @@ public class Cliente {
     private String nombre;
     private String apellido;
     private String Direccion;
-    private int idTarjeta;
+    private Tarjeta tarjeta;
 
-    public Cliente(String nit, String nombre, String apellido, String Direccion, int idTarjeta) {
+    public Cliente(String nit, String nombre, String apellido, String Direccion, Tarjeta tarjeta) {
         this.nit = nit;
         this.nombre = nombre;
         this.apellido = apellido;
         this.Direccion = Direccion;
-        this.idTarjeta = idTarjeta;
+        this.tarjeta = tarjeta;
     }
 
     public String getNit() {
@@ -56,12 +56,12 @@ public class Cliente {
         this.Direccion = Direccion;
     }
 
-    public int getIdTarjeta() {
-        return idTarjeta;
+    public Tarjeta getTarjeta() {
+        return tarjeta;
     }
 
-    public void setIdTarjeta(int idTarjeta) {
-        this.idTarjeta = idTarjeta;
+    public void setIdTarjeta(Tarjeta tarjeta) {
+        this.tarjeta = tarjeta;
     }
 
 }
