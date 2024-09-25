@@ -13,11 +13,11 @@ public class Venta {
     private int id;
     private String fecha;
     private String clienteId;
-    private int cajeroId;
+    private String cajeroId;
     private Double totalSinDescuentos;
     private Double totalConDescuentos;
 
-    public Venta(int id, String fecha, String clienteId, int cajeroId, Double totalSinDescuentos, Double totalConDescuentos) {
+    public Venta(int id, String fecha, String clienteId, String cajeroId, Double totalSinDescuentos, Double totalConDescuentos) {
         this.id = id;
         this.fecha = fecha;
         this.clienteId = clienteId;
@@ -50,11 +50,11 @@ public class Venta {
         this.clienteId = clienteId;
     }
 
-    public int getCajeroId() {
+    public String getCajeroId() {
         return cajeroId;
     }
 
-    public void setCajeroId(int cajeroId) {
+    public void setCajeroId(String cajeroId) {
         this.cajeroId = cajeroId;
     }
 
