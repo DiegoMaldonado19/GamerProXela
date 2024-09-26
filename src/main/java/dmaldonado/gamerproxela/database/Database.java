@@ -74,7 +74,6 @@ public class Database {
         try {
             Class.forName("org.postgresql.Driver");
             conectar = DriverManager.getConnection(connect, usuarioAdministrador.getUser(), usuarioAdministrador.getPassword());
-            JOptionPane.showMessageDialog(null, "SE CONECTO CORRECTAMENTE A LA BASE DE DATOS");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, " ERROR AL CONECTAR A LA BASE DE DATOS, ERRO:" + e.toString());
         }

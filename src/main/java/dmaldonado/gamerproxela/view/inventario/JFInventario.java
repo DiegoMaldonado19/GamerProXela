@@ -4,7 +4,18 @@
  */
 package dmaldonado.gamerproxela.view.inventario;
 
+import dmaldonado.gamerproxela.controller.BodegaDAO;
+import dmaldonado.gamerproxela.controller.InventarioDAO;
+import dmaldonado.gamerproxela.controller.ProductoDAO;
+import dmaldonado.gamerproxela.domain.BodegaDTO;
+import dmaldonado.gamerproxela.domain.Inventario;
+import dmaldonado.gamerproxela.domain.InventarioDTO;
 import java.sql.Connection;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -12,12 +23,29 @@ import java.sql.Connection;
  */
 public class JFInventario extends javax.swing.JFrame {
 
+    private InventarioDAO inventarioDAO;
+    private Connection conexion;
+    private String nombreSucursal;
+    private Optional<List<InventarioDTO>> productosInventario;
+    private Optional<List<BodegaDTO>> productosBodega;
+    private BodegaDAO bodegaDAO;
+    private int idSucursal;
+    private String selectedText;
+   
+
     /**
      * Creates new form JFInventario
      */
-    public JFInventario(String sucursal, String rol, String nombreEmpleado, Connection conexion) {
+    public JFInventario(int idSucursal, String sucursal, String rol, String nombreEmpleado, Connection conexion) {
         initComponents();
+        this.conexion = conexion;
+        this.inventarioDAO = new InventarioDAO(this.conexion);
+        this.bodegaDAO = new BodegaDAO(this.conexion);
+        this.nombreSucursal = sucursal;
+        this.idSucursal = idSucursal;
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,23 +56,178 @@ public class JFInventario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        productosTextArea = new javax.swing.JTextArea();
+        ingresarInventarioButton = new javax.swing.JButton();
+        cargarBodegaButton = new javax.swing.JButton();
+        consultarInventarioButton = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("INGRESO DE PRODUCTOS A INVENTARIO");
+
+        productosTextArea.setColumns(20);
+        productosTextArea.setRows(5);
+        productosTextArea.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                productosTextAreaCaretUpdate(evt);
+            }
+        });
+        jScrollPane1.setViewportView(productosTextArea);
+
+        ingresarInventarioButton.setText("Ingresar Productos a Inventario");
+        ingresarInventarioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingresarInventarioButtonActionPerformed(evt);
+            }
+        });
+
+        cargarBodegaButton.setText("Cargar Productos en Bodega");
+        cargarBodegaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargarBodegaButtonActionPerformed(evt);
+            }
+        });
+
+        consultarInventarioButton.setText("Consultar Productos en Inventario");
+        consultarInventarioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultarInventarioButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(ingresarInventarioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cargarBodegaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(consultarInventarioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(184, 184, 184))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(85, 85, 85)
+                        .addComponent(cargarBodegaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(ingresarInventarioButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(consultarInventarioButton)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void ingresarInventarioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarInventarioButtonActionPerformed
+        this.productosTextArea.setText(" ");
+
+       // try {
+         //   this.inventarioDAO.insertarProductoEnBodega());
+        //} catch (Exception e) {
+          //  JOptionPane.showMessageDialog(null, "Error al consultar la base de datos: " + e.getMessage());
+        //}
+
+    }//GEN-LAST:event_ingresarInventarioButtonActionPerformed
+
+    private void cargarBodegaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarBodegaButtonActionPerformed
+        this.productosTextArea.setText(" ");
+        try {
+            this.productosBodega = this.bodegaDAO.obtenerProductosEnBodega(this.nombreSucursal);
+            if (this.productosBodega.isPresent()) {
+                StringBuilder sb = new StringBuilder();
+                for (BodegaDTO bodega : productosBodega.get()) {
+                    sb.append("Sucursal: ").append(bodega.getNombreSucursal())
+                            .append(" Producto: ").append(bodega.getNombreProducto())
+                            .append(" Cantidad: ").append(bodega.getCantidad()).append("\n\n");
+                }
+                this.productosTextArea.setText(sb.toString());
+            } else {
+                this.productosTextArea.setText("No hay productos en la bodega.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al consultar la base de datos: " + e.getMessage());
+        }
+    }//GEN-LAST:event_cargarBodegaButtonActionPerformed
+
+    private void consultarInventarioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarInventarioButtonActionPerformed
+        this.productosTextArea.setText(" ");
+        try {
+            this.productosInventario = this.inventarioDAO.obtenerProductosEnBodega(this.nombreSucursal);
+            if (productosInventario.isPresent()) {
+                StringBuilder sb = new StringBuilder();
+                for (InventarioDTO inventario : productosInventario.get()) {
+                    sb.append("Sucursal: ").append(inventario.getNombreSucursal())
+                            .append(" Producto: ").append(inventario.getNombreProducto())
+                            .append(" Cantidad: ").append(inventario.getCantidad())
+                            .append(" Pasillo: ").append(inventario.getPasillo())
+                            .append(" Precio: ").append(inventario.getPrecio()).append("\n\n");
+                }
+                this.productosTextArea.setText(sb.toString());
+            } else {
+                this.productosTextArea.setText("No hay productos en la bodega.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al consultar la base de datos: " + e.getMessage());
+        }
+    }//GEN-LAST:event_consultarInventarioButtonActionPerformed
+
+    private void productosTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_productosTextAreaCaretUpdate
+
+        int start = this.productosTextArea.getSelectionStart();
+        int end = this.productosTextArea.getSelectionEnd();
+        if (start != end) {
+            this.selectedText = this.productosTextArea.getSelectedText();
+            System.out.println("Texto seleccionado: " + this.selectedText);
+        } else {
+            this.selectedText = "";
+        }
+    }//GEN-LAST:event_productosTextAreaCaretUpdate
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cargarBodegaButton;
+    private javax.swing.JButton consultarInventarioButton;
+    private javax.swing.JButton ingresarInventarioButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea productosTextArea;
     // End of variables declaration//GEN-END:variables
 }

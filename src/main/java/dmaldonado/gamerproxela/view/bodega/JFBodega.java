@@ -4,7 +4,13 @@
  */
 package dmaldonado.gamerproxela.view.bodega;
 
+import dmaldonado.gamerproxela.controller.BodegaDAO;
+import dmaldonado.gamerproxela.controller.ProductoDAO;
+import dmaldonado.gamerproxela.controller.SucursalDAO;
+import dmaldonado.gamerproxela.domain.Bodega;
+import dmaldonado.gamerproxela.domain.Producto;
 import java.sql.Connection;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -12,11 +18,23 @@ import java.sql.Connection;
  */
 public class JFBodega extends javax.swing.JFrame {
 
+    private Connection conexion;
+    private ProductoDAO productoDAO;
+    private BodegaDAO bodegaDAO;
+    private SucursalDAO sucursalDAO;
+    private int sucursal;
+
     /**
      * Creates new form JFBodega
      */
-    public JFBodega(String sucursal, String rol, String nombreEmpleado, Connection conexion) {
+    public JFBodega(int id, String rol, String nombreEmpleado, Connection conexion) {
         initComponents();
+        this.conexion = conexion;
+        this.productoDAO = new ProductoDAO(this.conexion);
+        this.bodegaDAO = new BodegaDAO(this.conexion);
+        this.sucursalDAO = new SucursalDAO(this.conexion);
+        this.sucursal = id;
+        this.bienvenidaLabel.setText("Bienvenido a la vista de Bodega"+nombreEmpleado);
     }
 
     /**
@@ -28,23 +46,174 @@ public class JFBodega extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        ingresarProductoButton = new javax.swing.JButton();
+        nombreProductoTextField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        descripcionProductoTextField = new javax.swing.JTextField();
+        precioTextField = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        cantidadTextField = new javax.swing.JTextField();
+        bienvenidaLabel = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("INGRESO DE PRODUCTOS A BODEGA");
+
+        jLabel2.setText("Nombre");
+
+        ingresarProductoButton.setText("Ingresar Producto");
+        ingresarProductoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingresarProductoButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Descripcion");
+
+        jLabel4.setText("Precio");
+
+        jLabel5.setText("Cantidad de Ingreso");
+
+        cantidadTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cantidadTextFieldActionPerformed(evt);
+            }
+        });
+
+        bienvenidaLabel.setText("jLabel6");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(141, 141, 141)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(46, 46, 46)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(descripcionProductoTextField)
+                                    .addComponent(nombreProductoTextField)
+                                    .addComponent(precioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cantidadTextField))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(222, 222, 222)
+                        .addComponent(ingresarProductoButton)))
+                .addContainerGap(145, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(bienvenidaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(179, 179, 179)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(bienvenidaLabel)
+                .addGap(24, 24, 24)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nombreProductoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(descripcionProductoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(precioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(cantidadTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(ingresarProductoButton)
+                .addGap(63, 63, 63))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void ingresarProductoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarProductoButtonActionPerformed
+        String nombre = this.nombreProductoTextField.getText();
+        String descripcion = this.descripcionProductoTextField.getText();
+        Double precio = Double.valueOf(this.precioTextField.getText());
+        int idProducto = 1;
+        int cantidad = Integer.valueOf(this.cantidadTextField.getText());
+        
+        Producto productoNuevo = new Producto(0, nombre, descripcion, precio);
+
+        try {
+            this.productoDAO.insertarProducto(productoNuevo);
+            idProducto = this.productoDAO.obtenerIdProductoPorNombre(nombre);
+            
+            Bodega bodega = new Bodega(this.sucursal, idProducto, cantidad);
+            
+            this.bodegaDAO.insertarProductoEnBodega(bodega);
+            
+            JOptionPane.showMessageDialog(null, "Producto: "+ nombre +"añadido con exito");
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al consultar la base de datos: " + e.getMessage());
+        }
+        
+        
+
+    }//GEN-LAST:event_ingresarProductoButtonActionPerformed
+
+    private void cantidadTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cantidadTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cantidadTextFieldActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel bienvenidaLabel;
+    private javax.swing.JTextField cantidadTextField;
+    private javax.swing.JTextField descripcionProductoTextField;
+    private javax.swing.JButton ingresarProductoButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField nombreProductoTextField;
+    private javax.swing.JTextField precioTextField;
     // End of variables declaration//GEN-END:variables
 }

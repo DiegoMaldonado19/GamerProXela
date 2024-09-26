@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -45,20 +47,20 @@ public class ProductoDAO {
 
         return productos.isEmpty() ? Optional.empty() : Optional.of(productos);
     }
-    
-    public void insertarProducto(Producto producto) throws SQLException{
+
+    public void insertarProducto(Producto producto) throws SQLException {
         String sqlProducto = "INSERT INTO cp.producto (nombre, descripcion, precio) VALUES (?, ?, ?)";
         PreparedStatement pstmtProducto = conexion.prepareStatement(sqlProducto);
-        
+
         pstmtProducto.setString(1, producto.getNombre());
         pstmtProducto.setString(2, producto.getDescripcion());
         pstmtProducto.setDouble(3, producto.getPrecio());
-        
+
         pstmtProducto.executeUpdate();
-        
+
         pstmtProducto.close();
     }
-    
+
     public int obtenerIdProductoPorNombre(String nombreProducto) throws SQLException {
         int idProducto = -1;
         String sql = "SELECT id FROM cp.producto WHERE nombre = ?";
@@ -69,6 +71,7 @@ public class ProductoDAO {
 
             if (rs.next()) {
                 idProducto = rs.getInt("id");
+                System.out.println(idProducto);
             }
         }
 

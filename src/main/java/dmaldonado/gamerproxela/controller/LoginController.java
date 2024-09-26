@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,10 +25,12 @@ public class LoginController {
     private Connection conexion;
     private Database database;
     private SucursalDAO sucursalDAO;
+    private JFrame loginFrame;
 
-    public LoginController() {
+    public LoginController(JFrame loginFrame) {
         this.database = new Database();
         this.conexion = this.database.establecerConexionAdmin();
+        this.loginFrame = loginFrame;
     }
     
     public void login(String username, String password){
@@ -47,6 +50,7 @@ public class LoginController {
                     int rolId = resultadoUsuario.getInt("rol_id");
                     String nombre = resultadoUsuario.getString("nombre");
                     int id = resultadoUsuario.getInt("sucursal_id");
+                    System.out.println(id);
                     
                     this.sucursalDAO = new SucursalDAO(this.conexion);
                     
@@ -54,18 +58,22 @@ public class LoginController {
                         this.conexion = database.establecerConexionPorRol("Cajero");
                         JFCajero cajeroFrame = new JFCajero(this.sucursalDAO.obtenerNombreSucursalPorId(id), "Cajero", nombre, this.conexion);
                         cajeroFrame.setVisible(true);
+                        this.loginFrame.setVisible(false);
                     } else if(rolId == 2){
                         this.conexion = database.establecerConexionPorRol("Bodega");
-                        JFBodega bodegaFrame = new JFBodega(this.sucursalDAO.obtenerNombreSucursalPorId(id), "Bodega", nombre, this.conexion);
-                        bodegaFrame.setVisible(true);;
+                        JFBodega bodegaFrame = new JFBodega(id, "Bodega", nombre, this.conexion);
+                        bodegaFrame.setVisible(true);
+                        this.loginFrame.setVisible(false);
                     } else if(rolId == 3){
                         this.conexion = database.establecerConexionPorRol("Inventario");
-                        JFInventario inventarioFrame = new JFInventario(this.sucursalDAO.obtenerNombreSucursalPorId(id), "Inventario", nombre, this.conexion);
+                        JFInventario inventarioFrame = new JFInventario(id, this.sucursalDAO.obtenerNombreSucursalPorId(id), "Inventario", nombre, this.conexion);
                         inventarioFrame.setVisible(true);
+                        this.loginFrame.setVisible(false);
                     } else if(rolId == 4){
                         this.conexion = database.establecerConexionPorRol("Administrador");
                         JFAdmin adminFrame = new JFAdmin(this.sucursalDAO.obtenerNombreSucursalPorId(id), "Administrador", nombre, this.conexion);
                         adminFrame.setVisible(true);
+                        this.loginFrame.setVisible(false);
                     } else {
                         JOptionPane.showMessageDialog(null, "Rol desconocido");
                     }
