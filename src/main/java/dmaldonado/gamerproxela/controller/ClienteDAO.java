@@ -68,4 +68,20 @@ public class ClienteDAO {
         
         pstmtCliente.close();
     }
+    
+    public boolean existeClientePorNit(String nitCliente) throws SQLException {
+    boolean existe = false;
+    String sql = "SELECT 1 FROM cc.cliente WHERE nit = ?";
+
+    try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+        pstmt.setString(1, nitCliente);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            existe = true;
+        }
+    }
+
+    return existe;
+}
 }

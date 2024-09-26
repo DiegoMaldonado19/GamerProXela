@@ -42,10 +42,15 @@ GRANT INSERT,UPDATE,DELETE,SELECT ON TABLE cd.historial_descuento TO admin;
 -- añadiendo permisos a rol de cajero
 GRANT USAGE ON SCHEMA cv TO cajero;
 GRANT USAGE ON SCHEMA cc TO cajero;
+GRANT USAGE ON SCHEMA cp TO cajero;
+GRANT USAGE ON SCHEMA ci TO cajero;
 
 GRANT INSERT,SELECT ON TABLE cv.venta TO cajero;
 GRANT INSERT,SELECT ON TABLE cv.detalle_venta TO cajero;
 GRANT INSERT,SELECT ON TABLE cc.cliente TO cajero;
+GRANT INSERT,UPDATE,SELECT ON TABLE cp.producto TO cajero;
+GRANT INSERT,UPDATE,SELECT ON TABLE cp.sucursal TO cajero;
+GRANT INSERT,UPDATE,SELECT ON TABLE ci.inventario TO cajero;
 
 -- añadiendo permisos a rol de bodega
 GRANT USAGE ON SCHEMA cp TO bodega;

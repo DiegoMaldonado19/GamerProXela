@@ -56,7 +56,7 @@ public class LoginController {
                     
                     if(rolId == 1){
                         this.conexion = database.establecerConexionPorRol("Cajero");
-                        JFCajero cajeroFrame = new JFCajero(this.sucursalDAO.obtenerNombreSucursalPorId(id), "Cajero", nombre, this.conexion);
+                        JFCajero cajeroFrame = new JFCajero(id, this.sucursalDAO.obtenerNombreSucursalPorId(id), "Cajero", nombre, this.conexion);
                         cajeroFrame.setVisible(true);
                         this.loginFrame.setVisible(false);
                     } else if(rolId == 2){

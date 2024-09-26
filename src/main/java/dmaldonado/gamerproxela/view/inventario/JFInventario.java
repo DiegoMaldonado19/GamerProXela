@@ -70,11 +70,6 @@ public class JFInventario extends javax.swing.JFrame {
 
         productosTextArea.setColumns(20);
         productosTextArea.setRows(5);
-        productosTextArea.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                productosTextAreaCaretUpdate(evt);
-            }
-        });
         jScrollPane1.setViewportView(productosTextArea);
 
         ingresarInventarioButton.setText("Ingresar Productos a Inventario");
@@ -207,18 +202,6 @@ public class JFInventario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al consultar la base de datos: " + e.getMessage());
         }
     }//GEN-LAST:event_consultarInventarioButtonActionPerformed
-
-    private void productosTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_productosTextAreaCaretUpdate
-
-        int start = this.productosTextArea.getSelectionStart();
-        int end = this.productosTextArea.getSelectionEnd();
-        if (start != end) {
-            this.selectedText = this.productosTextArea.getSelectedText();
-            System.out.println("Texto seleccionado: " + this.selectedText);
-        } else {
-            this.selectedText = "";
-        }
-    }//GEN-LAST:event_productosTextAreaCaretUpdate
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

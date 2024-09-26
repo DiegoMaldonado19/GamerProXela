@@ -12,8 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -76,5 +74,22 @@ public class ProductoDAO {
         }
 
         return idProducto;
+    }
+    
+      public Double obtenerPrecioProductoPorId(int idProducto) throws SQLException {
+        Double precioProducto = 0.0;
+        String sql = "SELECT precio FROM cp.producto WHERE precio = ?";
+
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+            pstmt.setInt(1, idProducto);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                precioProducto = rs.getDouble("precio");
+                System.out.println(precioProducto);
+            }
+        }
+
+        return precioProducto;
     }
 }
