@@ -24,7 +24,7 @@ public class Database {
 
     String connect = "jdbc:postgresql://" + usuarioAdministrador.getIp() + ":" + usuarioAdministrador.getPort() + "/" + usuarioAdministrador.getDb();
 
-    public Connection establecerConexion(String role) {
+    public Connection establecerConexionPorRol(String role) {
 
         if (role.equals(String.valueOf(Rol.Administrador))) {
             try {
@@ -66,6 +66,19 @@ public class Database {
             JOptionPane.showMessageDialog(null, "Usuario no pertenece al sistema");
             return null;
         }
+
+    }
+    
+    public Connection establecerConexionAdmin() {
+
+        try {
+            Class.forName("org.postgresql.Driver");
+            conectar = DriverManager.getConnection(connect, usuarioAdministrador.getUser(), usuarioAdministrador.getPassword());
+            JOptionPane.showMessageDialog(null, "SE CONECTO CORRECTAMENTE A LA BASE DE DATOS");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, " ERROR AL CONECTAR A LA BASE DE DATOS, ERRO:" + e.toString());
+        }
+        return conectar;
 
     }
 }
