@@ -65,12 +65,36 @@ CREATE TABLE ce.empleado (
     caja INT
 );
 
+CREATE TABLE cd.tarjeta (
+    id SERIAL PRIMARY KEY,
+    tipo VARCHAR(20) NOT NULL,
+    puntos_por_cada_200 NUMERIC(10, 2) NOT NULL
+);
+
+-- crear tablas dentro del esquema de control de clientes
+CREATE TABLE cc.cliente (
+    nit VARCHAR(20) UNIQUE PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(60) NOT NULL,
+    direccion VARCHAR(60) NOT NULL,
+    id_tarjeta INT REFERENCES cd.tarjeta(id)
+);
+
+
+CREATE TABLE cd.historial_descuento (
+    cliente_id VARCHAR(20) REFERENCES cc.cliente(nit),
+    tarjeta_id INT REFERENCES cd.tarjeta(id),
+    puntos_utilizados INT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (cliente_id, tarjeta_id)
+);
+
 -- crear tablas dentro del esquema de control de ventas
 CREATE TABLE cv.venta (
     id SERIAL PRIMARY KEY,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     cliente_id VARCHAR(20) REFERENCES cc.cliente(nit),
-    cajero_id INT REFERENCES ce.empleado(id),
+    cajero_id VARCHAR(13) REFERENCES ce.empleado(cui),
     total_sin_descuentos NUMERIC(10, 2) NOT NULL,
     total_con_descuentos NUMERIC(10, 2) NOT NULL
 );
@@ -83,26 +107,3 @@ CREATE TABLE cv.detalle_venta (
     PRIMARY KEY (venta_id, producto_id)
 );
 
--- crear tablas dentro del esquema de control de clientes
-CREATE TABLE cc.cliente (
-    nit VARCHAR(20) UNIQUE PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    apellido VARCHAR(60) NOT NULL,
-    direccion VARCHAR(60) NOT NULL,
-    id_tarjeta INT REFERENCES cd.tarjeta(id)
-);
-
--- crear tablas dentro del esquema de control de descuentos
-CREATE TABLE cd.tarjeta (
-    id SERIAL PRIMARY KEY,
-    tipo VARCHAR(20) NOT NULL,
-    puntos_por_cada_200 NUMERIC(10, 2) NOT NULL
-);
-
-CREATE TABLE cd.historial_descuento (
-    cliente_id VARCHAR(20) REFERENCES cc.cliente(nit),
-    tarjeta_id INT REFERENCES cd.tarjeta(id),
-    puntos_utilizados INT NOT NULL,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (cliente_id, tarjeta_id)
-);

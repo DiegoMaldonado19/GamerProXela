@@ -58,4 +58,20 @@ public class ProductoDAO {
         
         pstmtProducto.close();
     }
+    
+    public int obtenerIdProductoPorNombre(String nombreProducto) throws SQLException {
+        int idProducto = -1;
+        String sql = "SELECT id FROM cp.producto WHERE nombre = ?";
+
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+            pstmt.setString(1, nombreProducto);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                idProducto = rs.getInt("id");
+            }
+        }
+
+        return idProducto;
+    }
 }

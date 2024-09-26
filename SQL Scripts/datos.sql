@@ -555,11 +555,7 @@ INSERT INTO cb.bodega (sucursal_id, producto_id, cantidad) VALUES
 (3, 243, 62),
 (3, 244, 84),
 (3, 245, 26),
-(3, 246, 48),
-(3, 247, 70),
-(3, 248, 92),
-(3, 249, 14),
-(3, 250, 36);
+(3, 246, 48);
 
 -- Inserción de inventario
 INSERT INTO ci.inventario (sucursal_id, producto_id, cantidad, pasillo) VALUES 
@@ -574,10 +570,10 @@ INSERT INTO ci.inventario (sucursal_id, producto_id, cantidad, pasillo) VALUES
 (2, 104, 25, 'D2'),
 (2, 105, 30, 'E2'),
 (3, 176, 45, 'A1'),
-(3, 177, 21, 'A2');
+(3, 177, 21, 'A2'),
 (3, 178, 23, 'C1'),
 (3, 179, 25, 'E1'),
-(3, 180, 40, 'G1'),
+(3, 180, 40, 'G1');
 
 INSERT INTO cc.cliente (nit, nombre, apellido, direccion, id_tarjeta) VALUES
 ('1234567890123', 'Juan', 'Pérez', 'Calle Falsa 123', 1),

@@ -10,24 +10,14 @@ package dmaldonado.gamerproxela.domain;
  */
 public class Bodega {
 
-    private int id;
     private int sucursalId;
     private int productoId;
     private int cantidad;
 
-    public Bodega(int id, int sucursalId, int productoId, int cantidad) {
-        this.id = id;
+    public Bodega(int sucursalId, int productoId, int cantidad) {
         this.sucursalId = sucursalId;
         this.productoId = productoId;
         this.cantidad = cantidad;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getSucursalId() {

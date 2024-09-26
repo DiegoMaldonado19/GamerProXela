@@ -10,26 +10,16 @@ package dmaldonado.gamerproxela.domain;
  */
 public class Inventario {
 
-    private int id;
     private int sucursalId;
     private int productoId;
     private int cantidad;
     private String pasillo;
 
-    public Inventario(int id, int sucursalId, int productoId, int cantidad, String pasillo) {
-        this.id = id;
+    public Inventario(int sucursalId, int productoId, int cantidad, String pasillo) {
         this.sucursalId = sucursalId;
         this.productoId = productoId;
         this.cantidad = cantidad;
         this.pasillo = pasillo;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getSucursalId() {

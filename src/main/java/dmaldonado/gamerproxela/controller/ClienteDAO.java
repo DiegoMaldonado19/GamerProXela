@@ -54,7 +54,7 @@ public class ClienteDAO {
         return clientes.isEmpty() ? Optional.empty() : Optional.of(clientes);
     }
     
-    public void insertarProducto(Cliente cliente) throws SQLException{
+    public void insertarCliente(Cliente cliente) throws SQLException{
         String sqlCliente = "INSERT INTO cc.cliente (nit, nombre, apellido, direccion, id_tarjeta) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement pstmtCliente = conexion.prepareStatement(sqlCliente);
         

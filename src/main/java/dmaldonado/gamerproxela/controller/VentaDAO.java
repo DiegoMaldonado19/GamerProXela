@@ -4,6 +4,7 @@
  */
 package dmaldonado.gamerproxela.controller;
 
+import dmaldonado.gamerproxela.domain.Cliente;
 import dmaldonado.gamerproxela.domain.DetalleVenta;
 import dmaldonado.gamerproxela.domain.Venta;
 import java.sql.Connection;
@@ -17,29 +18,20 @@ import java.util.List;
  * @author Diego Maldonado
  */
 public class VentaDAO {
-    private Connection conexion; 
+    private Connection conexion;
+    private ClienteDAO clienteDAO;
 
     public VentaDAO(Connection conexion) {
         this.conexion = conexion;
+        this.clienteDAO = new ClienteDAO(this.conexion);
     }
-
-    private int obtenerIdProductoPorNombre(String nombreProducto) throws SQLException {
-        int idProducto = -1;
-        String sql = "SELECT id FROM cp.producto WHERE nombre = ?";
-
-        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-            pstmt.setString(1, nombreProducto);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                idProducto = rs.getInt("id");
-            }
-        }
-
-        return idProducto;
-    }
-
-    public void insertarVenta(Venta venta, List<DetalleVenta> detalles) throws SQLException {
+    
+    public void insertarVenta(Venta venta, List<DetalleVenta> detalles, Cliente cliente) throws SQLException {
+        
+        this.clienteDAO.insertarCliente(cliente);
+        
+        
+        venta.setClienteId(obtenerUltimoIdGeneradoCliente());
         
         String sqlVenta = "INSERT INTO cv.venta (fecha, cliente_id, cajero_id, total_sin_descuentos, total_con_descuentos ) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement pstmtVenta = conexion.prepareStatement(sqlVenta);
@@ -50,10 +42,9 @@ public class VentaDAO {
         pstmtVenta.setDouble(4, venta.getTotalSinDescuentos());
         pstmtVenta.setDouble(5, venta.getTotalConDescuentos());
         pstmtVenta.executeUpdate();
-
-        int idVentaGenerado = obtenerUltimoIdGenerado();
-
         
+        int idVentaGenerado = obtenerUltimoIdGeneradoVenta();
+
         String sqlDetalleVenta = "INSERT INTO cv.detalle_venta (venta_id, producto_id, cantidad, precio_unitario) VALUES (?, ?, ?, ?)";
         PreparedStatement pstmtDetalleVenta = conexion.prepareStatement(sqlDetalleVenta);
 
@@ -73,7 +64,7 @@ public class VentaDAO {
         pstmtDetalleVenta.close();
     }
 
-    private int obtenerUltimoIdGenerado() throws SQLException {
+    private int obtenerUltimoIdGeneradoVenta() throws SQLException {
         int idGenerado = -1;
         String sql = "SELECT MAX(id) as id FROM cv.venta";
         PreparedStatement pstmt = conexion.prepareStatement(sql);
@@ -88,4 +79,21 @@ public class VentaDAO {
 
         return idGenerado;
     }
+    
+    private String obtenerUltimoIdGeneradoCliente() throws SQLException {
+        String idGenerado = "";
+        String sql = "SELECT MAX(nit) as id FROM cc.cliente";
+        PreparedStatement pstmt = conexion.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            idGenerado = rs.getString("nit");
+        }
+
+        rs.close();
+        pstmt.close();
+
+        return idGenerado;
+    }
+
 }
