@@ -106,13 +106,3 @@ CREATE TABLE cd.historial_descuento (
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (cliente_id, tarjeta_id)
 );
-
--- insercion inicial de datos de roles
-INSERT INTO ce.rol (nombre) VALUES ('Cajero'), ('Bodega'), ('Inventario'), ('Administrador');
-
--- insercion inicial de datos de tarjeta
-INSERT INTO cd.tarjeta (tipo, puntos_por_cada_200) VALUES 
-('Común', 5), 
-('Oro', 10), 
-('Platino', 20), 
-('Diamante', 30);
