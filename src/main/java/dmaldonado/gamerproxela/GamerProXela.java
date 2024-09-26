@@ -4,6 +4,8 @@
 
 package dmaldonado.gamerproxela;
 
+import dmaldonado.gamerproxela.view.login.JFLogin;
+
 /**
  *
  * @author Diego Maldonado
@@ -11,6 +13,8 @@ package dmaldonado.gamerproxela;
 public class GamerProXela {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        JFLogin loginFrame = new JFLogin();
+        loginFrame.setVisible(true);
+        
     }
 }

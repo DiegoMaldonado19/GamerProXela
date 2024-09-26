@@ -25,7 +25,7 @@ public class SucursalDAO {
         
         String nombreSucursal = "";
         
-        String sql = "SELECT nombre FROM cp.surcursal WHERE id = ?";
+        String sql = "SELECT nombre FROM cp.sucursal WHERE id = ?";
 
         try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -37,5 +37,23 @@ public class SucursalDAO {
         }
 
         return nombreSucursal;
+    }
+    
+    public int obteneridSucursalPorNombre(String nombre) throws SQLException {
+        
+        int idSucursal = 0;
+        
+        String sql = "SELECT * FROM cp.sucursal WHERE nombre = ?";
+
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+            pstmt.setString(1, nombre);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                idSucursal = rs.getInt("id");
+            }
+        }
+
+        return idSucursal;
     }
 }

@@ -26,6 +26,7 @@ public class LoginController {
     private SucursalDAO sucursalDAO;
 
     public LoginController() {
+        this.database = new Database();
         this.conexion = this.database.establecerConexionAdmin();
     }
     
@@ -78,7 +79,6 @@ public class LoginController {
 
             resultadoUsuario.close();
             pstmtUsuario.close();
-            conexion.close();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al consultar la base de datos: " + e.getMessage());
